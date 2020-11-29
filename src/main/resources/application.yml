@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: jdbc:mysql://172.16.32.101:3306/toutiao?useUnicode=true&characterEncoding=utf8&useSSL=false
+    username: root
+    password: 123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+mybatis:
+  config-location: classpath:/mybatis-config.xml
+  mapper-locations: classpath:/mapper/*.xml
+
+logging:
+  level:
+    org:
+      springframework:
+        test: error
+    com:
+      example:
+        toutiao:
+          dao: debug

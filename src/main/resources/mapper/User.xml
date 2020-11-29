@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.toutiao.dao.UserDao">
+    <sql id="insert" >
+        name,password,salt,headUrl
+    </sql>
+
+    <sql id="where_user">
+        <where>
+            <if test="id!=0">
+                and id=#{id}
+            </if>
+            <if test="name!=null">
+                and name=#{name}
+            </if>
+        </where>
+    </sql>
+
+    <select id="get" resultType="com.example.toutiao.model.User">
+       select * from user <include refid="where_user"/>
+    </select>
+    <insert id="insert">
+        insert into user( <include refid="insert"/> ) values(#{name},#{password},#{salt},#{headUrl})
+    </insert>
+</mapper>
