@@ -3,6 +3,7 @@ package com.example.toutiao.model.group;
 import com.example.toutiao.model.News;
 import com.example.toutiao.model.User;
 import org.apache.ibatis.type.Alias;
+import org.apache.ibatis.session.defaults.DefaultSqlSession;
 
 @Alias(value = "newsUser")
 public class NewsUser {

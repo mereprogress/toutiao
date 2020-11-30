@@ -3,11 +3,11 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.toutiao.dao.UserDao">
-    <sql id="insert" >
+    <sql id="non_auto" >
         name,password,salt,headUrl
     </sql>
 
-    <sql id="where_user">
+    <sql id="where_get">
         <where>
             <if test="id!=0">
                 and id=#{id}
@@ -15,13 +15,33 @@
             <if test="name!=null">
                 and name=#{name}
             </if>
+            <if test="name==null and id==0">
+                and id=0
+            </if>
         </where>
     </sql>
 
+    <sql id="set_user">
+        <set>
+            <if test="name!=null">
+                name=#{name},
+            </if>
+            <if test="password">
+                password=#{password},
+            </if>
+            <if test="headUrl!=null">
+                headUrl=#{headUrl},
+            </if>
+        </set>
+    </sql>
+
     <select id="get" resultType="com.example.toutiao.model.User">
-       select * from user <include refid="where_user"/>
+       select id,<include refid="non_auto"/> from user <include refid="where_get"/>
     </select>
-    <insert id="insert">
-        insert into user( <include refid="insert"/> ) values(#{name},#{password},#{salt},#{headUrl})
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="com.example.toutiao.model.User">
+        insert into user( <include refid="non_auto"/> ) values(#{name},#{password},#{salt},#{headUrl})
     </insert>
+    <update id="updateUser" parameterType="com.example.toutiao.model.User" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        update user <include refid="set_user"/> where id=#{id}
+    </update>
 </mapper>

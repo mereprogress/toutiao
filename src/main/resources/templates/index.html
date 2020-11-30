@@ -1,10 +1,102 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="UTF-8" />
+    <title>Thymeleaf3 + Servlet3 示例</title>
+    <link rel="stylesheet" th:href="@{http://localhost:8080/webjars/bootstrap/4.5.3/css/bootstrap.min.css}">
 </head>
 <body>
+<script th:src="@{http://localhost:8080/webjars/jquery/3.5.1/jquery.js}"></script>
+<script src="http://localhost:8080/webjars/bootstrap/4.5.3/js/bootstrap.min.js"></script>
+    <div style="width:800px;display: block;margin: 0 auto;">
+        <div th:each="vo:${vos}" style="margin: 30px 0;height: 124px;" >
+                    <img class="in-block" th:src="'http://localhost:8080/'+${vo.news.imageUrl}" style="width: 190px; height: 100%;"/>
+                    <div class="in-block" style="width: 400px; height: 100%;">
+                     标题 <h5 class="in-block" th:href="${vo.news.link}" th:text="${ vo.news.title}"/>
+                        <p style="font-size: 12px;height: 55px;overflow: hidden;">我注意到有报道称，台湾今年花费118亿美元采购美武器，折合新台币3422亿元，相当于台湾民众人均负担1.45万元。不知道台湾同胞对自己辛勤劳动创造出来的财富被用来大量购买美国的二手武器、充当美国利益集团的“提款机”作何感想</p>
+                        <div class="flex" style="color: gray;font-size: 10px">
+                            爱心<span style="flex: 1;" class="in-block" th:text="${vo.news.likeCount}"/>
+                            评论<span style="flex: 1;" class="in-block" th:text="${vo.news.commentCount}"/>
+                            <span style="flex: 2"></span>
+                            <span style="flex: 2;font-size: 12px;" class="in-block" th:text="  ${#dates.format(vo.news.createDate,'yyyy年mm月dd日')}" />
+                        </div>
+
+                    </div>
+
+                    <div class="in-block" style="width: 100px;height: 100%;">
+                        <img class="block rounded-circle" th:src="@{${vo.user.headUrl}}" style="width: 100px;height: 100px;" />
+                        <span class="d-block" style="width: 100%;text-align: center;" th:text="${vo.user.name}"></span>
+                    </div>
+        </div>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination" >
+                <li class="page-item" id="pre" ><a class="page-link" href="javascript:;">Previous</a></li>
+<!--                <li class="page-item"><a class="page-link" th:href="@{/index/1}" th:class="${#request.getRequestURI().lastIndexOf('/1')}>1?'active page-link':'page-link'" href="#">1</a></li>-->
+                <li  th:if="${#request.getRequestURI().split('/')[2]}<4"  th:each="index:${#numbers.sequence(1,5)}" class="page-item"><a class="page-link" th:href="@{'/index/'+${index} }" th:class="${#request.getRequestURI().lastIndexOf('/'+index)}>1?'active page-link':'page-link'" th:text="${index}" href="#">1</a></li>
+<!--                <li  th:if="${#request.getRequestURI().split('/')[2]}>4"  th:each="index:${#numbers.sequence((#request.getRequestURI().split('/')[2]),count/10+1)}" class="page-item"><a class="page-link" th:href="@{'/index/'+${index} }" th:class="${#request.getRequestURI().lastIndexOf('/'+index)}>1?'active page-link':'page-link'" th:text="${index}" href="#">1</a></li>-->
+
+                <li class="page-item" id="next"><a class="page-link" href="javascript:;">Next </a></li>
+            </ul>
+        </nav>
+    </div>
+
+<script>
+    $(function () {
+        var index=[[${#request.getRequestURI().split('/')[2]}]];
+        var max=Math.ceil( [[${count}]]/10);
+        (function () {
+
+
+
+            if(index==1){
+                $("#pre").css("pointer-events","none");
+            }
+
+            if(index==max){
+                $("#next").css("pointer-events","none");
+            }
+        })();
+        $("#pre").click(function () {
+            index=index-1;
+            alert(index);
+            window.location.href="http://localhost:8080/index/"+index;
+        });
+        $("#next").click(function () {
+            index=index+1;
+            alert(index);
+            window.location.href="http://localhost:8080/index/"+index;
+        });
+    })
+</script>
 
 </body>
+<style>
+    ul,li{
+        list-style: none;
+        padding: 0px;
+        margin: 0px;
+    }
+    .in-block{
+        display: inline-block;
+        vertical-align: middle;
+    }
+    .block{
+        display: block;
+        vertical-align: middle;
+    }
+    .flex{
+        display: flex;
+    }
+    .active{
+       color: red;
+    }
+
+    /*a {font-size:16px}*/
+    /*a:link {color: blue; text-decoration:none;}*/
+    /*a:active:{color: red; }*/
+    /*a:visited {color:purple;text-decoration:none;}*/
+    /*a:hover {color: red; text-decoration:underline;}*/
+</style>
 </html>
+
+

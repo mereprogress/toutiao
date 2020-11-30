@@ -3,9 +3,30 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.toutiao.dao.NewsUserDao">
-
-    <select id="getPart" resultType="newsUser">
-        select * from
+    <sql id="select_fields">
+        news.id id_news,title,link,image_url,like_count,comment_count,user_id,create_date,uid,user.id id_user,name,password,salt,headUrl
+    </sql>
+    <select id="getPart" resultMap="newsUser_map">
+        select <include refid="select_fields"/> from news left join user on news.user_id=user.id limit #{offset},#{length}
     </select>
+
+    <resultMap id="newsUser_map" type="newsUser">
+        <id property="news.id" column="id_news"/>
+        <result property="news.title" column="title"/>
+        <result property="news.link" column="link"/>
+        <result property="news.imageUrl" column="image_url"/>
+        <result property="news.likeCount" column="like_count"/>
+        <result property="news.commentCount" column="comment_count"/>
+        <result property="news.userId" column="user_id"/>
+        <result property="news.createDate" column="create_date"/>
+        <result property="news.uid" column="uid"/>
+        <association property="user" javaType="com.example.toutiao.model.User">
+            <id property="id" column="id_user"/>
+            <result property="name" column="name"/>
+            <result property="password" column="password"/>
+            <result property="salt" column="salt"/>
+            <result property="headUrl" column="headUrl"/>
+        </association>
+    </resultMap>
 
 </mapper>
