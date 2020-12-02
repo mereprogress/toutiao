@@ -3,7 +3,9 @@ package com.example.toutiao.dao;
 import com.example.toutiao.model.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Mapper
 @Repository
@@ -17,4 +19,10 @@ public interface UserDao {
 
     @Select(value = {"select ",FIELDS," from ",TABLE," where id=#{id}"})
     User getById(Integer id);
+
+    @Select(value={"select ",FIELDS," from ",TABLE," where name=#{name}"})
+    void getByName(String name);
+
+    @Select(value ={"select ",FIELDS," from ",TABLE," where name=#{name} and password=#{password}"} )
+    User getByNameAndPassword(@Param("name") String name, @Param("password") String password);
 }

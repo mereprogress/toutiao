@@ -12,4 +12,6 @@ public class Config {
     }
     @Bean
     public MyMvcConfigurer myMvcConfigurer(){return new MyMvcConfigurer();} //Configurer 与原先一起作用
+
+
 }

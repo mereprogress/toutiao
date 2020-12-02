@@ -2,6 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title>Thymeleaf3 + Servlet3 示例</title>
     <link rel="stylesheet" href="http://localhost:8080/webjars/bootstrap/4.5.0/css/bootstrap.min.css">
     <script type="text/javascript" src="http://localhost:8080/webjars/jquery/3.5.1/jquery.min.js"></script>
@@ -9,6 +11,76 @@
     <script type="text/javascript" src="http://localhost:8080/webjars/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 </head>
 <body>
+
+<div class="d-flex p-3">
+        <div class="flex-lg-fill"> </div>
+        <div class="flex-lg-fill text-center">
+            <a href="#" >
+                <h3>你关心的才是头条</h3>
+            </a>
+        </div>
+        <div class="flex-lg-fill">
+        <div class="btn-group  ">
+            <button th:if="${user}" type="button" class="btn btn-primary">分享</button>
+            <button th:if="${user}" type="button" class="btn btn-primary">站内信</button>
+            <button th:if="${user}" type="button" class="btn btn-primary">用户名</button>
+            <button th:if="${user}" type="button" class="btn btn-primary">退出</button>
+
+            <button th:unless="${user}" type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                登陆
+            </button>
+<!--            <button  id="login" type="button" class="btn btn-primary">登陆</button>-->
+        </div>
+          </div>
+         </div>
+</div>
+
+
+
+<!--<div class="mask" style="display: none;">-->
+<!--    <div class="login">-->
+<!--        <span>登录</span>-->
+<!--        <label for="id">账号</label>-->
+<!--        <input type="text" id="id" />-->
+<!--        <label for="password">密码</label>-->
+<!--        <input type="password" id="password" />-->
+<!--        <button type="button" id="in">登录</button>-->
+<!--        <button type="button" id="out">取消</button>-->
+<!--    </div>-->
+<!--</div>-->
+
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- 模态框头部 -->
+            <div class="modal-header">
+                <h4 class="modal-title"> <span>登录</span></h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <form action="/user">
+            <!-- 模态框主体 -->
+            <div class="modal-body">
+
+                    <label for="id">账号</label>
+                    <input type="text" id="id" />
+                    <label for="password">密码</label>
+                    <input type="password" id="password" />
+
+
+            </div>
+
+            <!-- 模态框底部 -->
+            <div class="modal-footer">
+                <button type="button" id="login" class="btn btn-secondary" >登录</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
     <div style="width:800px;display: block;margin: 0 auto;">
         <nav aria-label="Page navigation example">
             <ul class="pagination" >
@@ -39,25 +111,52 @@
         <div class="progress">
             <div class="progress-bar" th:style="'width:'+${page/num *100}+'%'"></div>
         </div>
-        <div th:each="vo:${vos}" style="margin: 30px 0;height: 124px;" >
-                    <img class="in-block" th:src="'http://localhost:8080/'+@{${vo.news.imageUrl}}" style="width: 190px; height: 100%;"/>
-                    <div class="in-block" style="width: 400px; height: 100%;">
-                     标题 <h5 class="in-block" th:href="${vo.news.link}" th:text="${ vo.news.title}"/>
-                        <p style="font-size: 12px;height: 55px;overflow: hidden;">我注意到有报道称，台湾今年花费118亿美元采购美武器，折合新台币3422亿元，相当于台湾民众人均负担1.45万元。不知道台湾同胞对自己辛勤劳动创造出来的财富被用来大量购买美国的二手武器、充当美国利益集团的“提款机”作何感想</p>
-                        <div class="flex" style="color: gray;font-size: 10px">
-                            爱心<span style="flex: 1;" class="in-block" th:text="${vo.news.likeCount}"/>
-                            评论<span style="flex: 1;" class="in-block" th:text="${vo.news.commentCount}"/>
-                            <span style="flex: 2"></span>
-                            <span style="flex: 2;font-size: 12px;" class="in-block" th:text="  ${#dates.format(vo.news.createDate,'yyyy年mm月dd日')}" />
-                        </div>
+<!--        <div th:each="vo:${vos}" style="margin: 30px 0;height: 124px;" >-->
+<!--                    <img class="in-block" th:src="'http://localhost:8080/'+@{${vo.news.imageUrl}}" style="width: 190px; height: 100%;"/>-->
+<!--                    <div class="in-block" style="width: 400px; height: 100%;">-->
+<!--                     标题 <h5 class="in-block" th:href="${vo.news.link}" th:text="${ vo.news.title}"/>-->
+<!--                        <p style="font-size: 12px;height: 55px;overflow: hidden;">我注意到有报道称，台湾今年花费118亿美元采购美武器，折合新台币3422亿元，相当于台湾民众人均负担1.45万元。不知道台湾同胞对自己辛勤劳动创造出来的财富被用来大量购买美国的二手武器、充当美国利益集团的“提款机”作何感想</p>-->
+<!--                        <div class="flex" style="color: gray;font-size: 10px">-->
+<!--                            爱心<span style="flex: 1;" class="in-block" th:text="${vo.news.likeCount}"/>-->
+<!--                            评论<span style="flex: 1;" class="in-block" th:text="${vo.news.commentCount}"/>-->
+<!--                            <span style="flex: 2"></span>-->
+<!--                            <span style="flex: 2;font-size: 12px;" class="in-block" th:text="  ${#dates.format(vo.news.createDate,'yyyy年MM月dd日')}" />-->
+<!--                        </div>-->
 
+<!--                    </div>-->
+
+<!--                    <div class="in-block" style="width: 100px;height: 100%;">-->
+<!--                        <img class="block rounded-circle" th:src="@{${vo.user.headUrl}}" style="width: 100px;height: 100px;" />-->
+<!--                        <span class="d-block" style="width: 100%;text-align: center;" th:text="${vo.user.name}"></span>-->
+<!--                    </div>-->
+<!--        </div>-->
+
+        <div th:each="newsUsers:${voss}"  >
+            <div class="card">
+                <div style="flex: 2;font-size: 30px; "  class="in-block card-body" th:text="  ${#dates.format(newsUsers.date,'yyyy年MM月dd日')}" />
+            </div>
+
+            <div th:each="vo:${newsUsers.newsUserList}" style="margin: 30px 0;height: 124px;" >
+                <img class="in-block" th:src="'http://localhost:8080/'+@{${vo.news.imageUrl}}" style="width: 190px; height: 100%;"/>
+                <div class="in-block" style="width: 400px; height: 100%;">
+                    标题 <h5 class="in-block" th:href="${vo.news.link}" th:text="${ vo.news.title}"/>
+                    <p style="font-size: 12px;height: 55px;overflow: hidden;">我注意到有报道称，台湾今年花费118亿美元采购美武器，折合新台币3422亿元，相当于台湾民众人均负担1.45万元。不知道台湾同胞对自己辛勤劳动创造出来的财富被用来大量购买美国的二手武器、充当美国利益集团的“提款机”作何感想</p>
+                    <div class="flex" style="color: gray;font-size: 10px">
+                        爱心<span style="flex: 1;" class="in-block" th:text="${vo.news.likeCount}"/>
+                        评论<span style="flex: 1;" class="in-block" th:text="${vo.news.commentCount}"/>
+                        <span style="flex: 2"></span>
+                        <span style="flex: 2;font-size: 12px;" class="in-block" th:text="  ${#dates.format(vo.news.createDate,'yyyy年MM月dd日')}" />
                     </div>
 
-                    <div class="in-block" style="width: 100px;height: 100%;">
-                        <img class="block rounded-circle" th:src="@{${vo.user.headUrl}}" style="width: 100px;height: 100px;" />
-                        <span class="d-block" style="width: 100%;text-align: center;" th:text="${vo.user.name}"></span>
-                    </div>
+                </div>
+
+                <div class="in-block" style="width: 100px;height: 100%;">
+                    <img class="block rounded-circle" th:src="@{${vo.user.headUrl}}" style="width: 100px;height: 100px;" />
+                    <span class="d-block" style="width: 100%;text-align: center;" th:text="${vo.user.name}"></span>
+                </div>
+            </div>
         </div>
+
         <nav aria-label="Page navigation example">
             <ul class="pagination" >
                 <li   class="page-item"><a class="page-link" th:href="@{'/index/'+1 }" th:class="${#request.getRequestURI().split('/')[2]}==1? 'active page-link': 'page-link' " th:text="开头" href="#">num</a></li>
@@ -105,6 +204,31 @@
             // alert(index);
             window.location.href="http://localhost:8080/index/"+index;
         });
+
+       $("#login").click(function () {
+
+
+           var username=$("#id").val();
+           var password=$("#password").val();
+           // var obj={};
+           // obj.aa=1;
+           // alert(obj.aa);
+
+           $.ajax({
+               url:"http://localhost:8080/user",
+               data: {
+                   "username": username,
+                   "password": password
+               },
+               dataType:"json",
+               type:"POST",
+               success:function (data) {
+                    alert(data);
+               },
+               contentType:"application/json"
+           });
+
+       })
     })
 </script>
 
@@ -129,6 +253,19 @@
     .active{
        color: red;
     }
+
+
+
+    input{
+        width: 350px;
+        height: 25px;
+        margin-left:20px ;
+        margin-bottom: 20px;
+    }
+    label{
+        margin-left:50px ;
+    }
+
 
     /*a {font-size:16px}*/
     /*a:link {color: blue; text-decoration:none;}*/

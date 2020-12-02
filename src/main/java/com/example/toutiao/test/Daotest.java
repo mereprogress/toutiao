@@ -34,13 +34,10 @@ public class Daotest {
     @Test
     public void main() {
 //        System.out.println(newsUserDao.getPart(0,1));
-        User user=new User();
-        user.setName("admin");
-        user.setPassword("admin");
-        user.setSalt("张三");
-        user.setHeadUrl("/image/admin.jsp");
-        userDao.insert(user);
-        System.out.println(user);
+      User user=new User();
+      user.setName("admin");
+      user.setPassword("admin");
+        System.out.println(userDao.getByNameAndPassword(user.getName(),user.getPassword()));
     }
 
 }
