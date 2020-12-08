@@ -12,9 +12,8 @@ public class UserService {
     UserDao userDao;
 
 
-    public User login(User user) {
-       user= userDao.getByNameAndPassword(user.getName(), user.getPassword());
-        return user;
+    public User exist(String username,String password) {
+        return userDao.getByNameAndPassword(username, password);
     }
 
 

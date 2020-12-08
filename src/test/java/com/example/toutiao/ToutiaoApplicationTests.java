@@ -11,8 +11,7 @@ class ToutiaoApplicationTests {
     @Autowired
     UserDao userDao;
     @Test
-    void contextLoads() {
-        System.out.println(userDao);
+    void contextLoads() {System.out.println(userDao);
     }
 
 }

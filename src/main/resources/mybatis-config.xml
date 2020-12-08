@@ -3,11 +3,13 @@
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
+
     <settings>
         <setting name="mapUnderscoreToCamelCase" value="true"/>
     </settings>
-
+<!--    包扫描没问题 当时指定类有问题 ，这个应该配在环境前面 ，-->
     <typeAliases>
         <package name="com.example.toutiao.model"/>
     </typeAliases>
+
 </configuration>

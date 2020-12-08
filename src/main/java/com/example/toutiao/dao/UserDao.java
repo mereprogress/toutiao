@@ -21,7 +21,7 @@ public interface UserDao {
     User getById(Integer id);
 
     @Select(value={"select ",FIELDS," from ",TABLE," where name=#{name}"})
-    void getByName(String name);
+    User getUserByName(String name);
 
     @Select(value ={"select ",FIELDS," from ",TABLE," where name=#{name} and password=#{password}"} )
     User getByNameAndPassword(@Param("name") String name, @Param("password") String password);

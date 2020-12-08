@@ -28,15 +28,12 @@ public class HomeController {
 
 
     @GetMapping(value = {"/","/index"})
-    String main(Map<String,Object> map , HttpServletResponse response){
-//        List<NewsUser> vos=newsUserService.getPath(0,10);
-//        map.put("vos",vos);
-//        if(count==null){
-//            count=newsUserService.getCount();
-//        }
-//        map.put("count",count);
+    String main(Map<String,Object> map , HttpServletResponse response,HttpServletRequest request){
 
-        return "redirect:index/1";
+
+        String replace =request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort();
+        System.out.println(replace);
+        return "redirect:"+replace+"/index/1";
     }
 
     @GetMapping(value = "/index/{page}")

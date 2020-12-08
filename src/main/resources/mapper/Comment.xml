@@ -1,0 +1,73 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.toutiao.dao.CommentDao">
+    <sql id="FIELDS">
+        id,content,entity_id,type,user_id
+    </sql>
+    <select id="getByNewsId" resultType="comment" >
+        select  <include refid="FIELDS"/> from comment  where type=0 and entity_id=#{newsId}
+    </select>
+
+    <select id="getCommentAndChildByNewsId" resultMap="commentAndChild">
+        select <include refid="FIELDS"/> from comment where type=0 and entity_id=#{newsId}
+    </select>
+
+    <select id="getByCommentId" resultType="comment">
+        select <include refid="FIELDS"/> from comment where type=1 and entity_id=#{commentId}
+    </select>
+
+    <resultMap id="commentAndChild" type="comment">
+        <id property="id" column="id"/>
+        <result property="content" column="content"/>
+        <result property="type" column="type"/>
+        <result property="entityId" column="entity_id"/>
+        <result property="userId" column="user_id" />
+        <collection property="childComments" column="id" fetchType="lazy" ofType="comment" select="getByCommentId" />
+    </resultMap>
+
+    <select id="getCommentAndChildByNewsIdJoin" resultMap="commentAndChildJoin">
+        select
+            parent.id as parent_id,
+            parent.content as parent_content,
+            parent.type as parent_type,
+            parent.entity_id as parent_entity_id,
+            parent.user_id as parent_user_id,
+            child.id as child_id,
+            child.content as child_content,
+            child.type as child_type,
+            child.entity_id as child_entity_id,
+            child.user_id as child_user_id
+        from comment as parent left join comment as child
+        on parent.id=child.entity_id
+        where parent.type=0 and child.type=1 and parent.entity_id=#{newsId}
+    </select>
+
+    <resultMap id="commentAndChildJoin" type="comment">
+        <id property="id" column="parent_id"/>
+        <result property="content" column="parent_content"/>
+        <result property="type" column="parent_type"/>
+        <result property="entityId" column="parent_entity_id"/>
+        <result property="userId" column="child_user_id"/>
+        <collection property="childComments" ofType="comment" >
+            <id property="id" column="child_id"/>
+            <result property="content" column="child_content"/>
+            <result property="type" column="child_type"/>
+            <result property="entityId" column="child_entity_id"/>
+            <result property="userId" column="child_user_id"/>
+        </collection>
+<!--写法二columnPrefix 自动给column 元素加前缀 可以给<><>内容加 ，也可以给resultMap 加 -->
+<!--        <collection property="childComments" ofType="Comment" resultMap="childMap" columnPrefix="child_" />-->
+    </resultMap>
+
+<!--    <resultMap id="childMap" type="comment">-->
+<!--        <id property="id" column="id"/>-->
+<!--        <result property="content" column="content"/>-->
+<!--        <result property="type" column="type"/>-->
+<!--        <result property="entityId" column="entity_id"/>-->
+<!--        <result property="userId" column="ser_id"/>-->
+<!--    </resultMap>-->
+
+
+</mapper>
